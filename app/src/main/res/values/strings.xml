@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">CameraMultipleActivity</string>
+    <string name="none"></string>
+    <string name="filter">Filter</string>
+    <string name="take_picture">Take Picture</string>
+    <string name="blur" >Blur</string>
+    <string name="open_gallery">Open Gallery</string>
+    <string name="share">Share</string>
+    <string name="photo_placed_here">Photo placed here</string>
+</resources>
