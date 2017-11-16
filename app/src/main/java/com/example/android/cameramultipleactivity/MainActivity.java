@@ -1,5 +1,6 @@
 package com.example.android.cameramultipleactivity;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
@@ -13,12 +14,16 @@ import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Display;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 
 
 import java.io.File;
@@ -67,7 +72,61 @@ public class MainActivity extends AppCompatActivity {
         filterPhotoButton.setOnClickListener(filterClick);
         blurPhotoButton.setOnClickListener(blurClick);
         takePhoto.setOnClickListener(takePhotoClick);
+        FrameLayout fl = (FrameLayout) findViewById(R.id.camera_view);
+        RelativeLayout rl = (RelativeLayout) findViewById(R.id.relative_lay);
+
+        if(getResources().getConfiguration().orientation == 2){
+            ViewGroup.LayoutParams frameParams = (ViewGroup.LayoutParams) fl.getLayoutParams();
+            Display display = getWindowManager().getDefaultDisplay();
+            int screen_height = display.getHeight();
+            screen_height = (int) (0.40 * screen_height);
+            frameParams.height = screen_height;
+            fl.setLayoutParams(frameParams);
+        }
     }
+
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        //modifyLayout(newConfig);
+        FrameLayout fl = (FrameLayout) findViewById(R.id.camera_view);
+        RelativeLayout rl = (RelativeLayout) findViewById(R.id.relative_lay);
+        //RelativeLayout.LayoutParams relParams = (RelativeLayout.LayoutParams) rl.getLayoutParams();
+        ImageView iv = (ImageView) findViewById(R.id.image_view);
+        //LinearLayout.LayoutParams imageParams = (LinearLayout.LayoutParams) iv.getLayoutParams();
+        ViewGroup.LayoutParams frameParams = (ViewGroup.LayoutParams) fl.getLayoutParams();
+        Button button = (Button) findViewById(R.id.button);
+        Button button4 = (Button) findViewById(R.id.button4);
+        Button button5 = (Button) findViewById(R.id.button5);
+        RelativeLayout.LayoutParams params1
+                = (RelativeLayout.LayoutParams) button.getLayoutParams();
+        RelativeLayout.LayoutParams params4
+                = (RelativeLayout.LayoutParams) button4.getLayoutParams();
+        RelativeLayout.LayoutParams params5
+                = (RelativeLayout.LayoutParams) button5.getLayoutParams();
+
+        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            Log.d("HELLO", "hello");
+            Display display = getWindowManager().getDefaultDisplay();
+            int screen_height = display.getHeight();
+            screen_height = (int) (0.40 * screen_height);
+            frameParams.height = screen_height;
+            fl.setLayoutParams(frameParams);
+            params4.addRule(RelativeLayout.LEFT_OF, R.id.button3);
+            params5.addRule(RelativeLayout.RIGHT_OF, R.id.button3);
+            button.setLayoutParams(params1);
+            button4.setLayoutParams(params4);
+            button5.setLayoutParams(params5);
+        } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT){
+            Display display = getWindowManager().getDefaultDisplay();
+            int screen_height = display.getHeight();
+            screen_height = (int) (0.50 * screen_height);
+            frameParams.height = screen_height;
+            fl.setLayoutParams(frameParams);
+
+        }
+
+    }
+
 
     void openImageChooser() {
         Intent intent = new Intent();
@@ -92,6 +151,7 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     };
+
 
     private View.OnClickListener openGallery = new View.OnClickListener(){
         @Override
